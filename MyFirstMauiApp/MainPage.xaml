@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    xml命名空间 'xml namespace'
+    声明引用 microsoft.com 上的 URI。
+    但是这些 URI 没有内容，仅充当版本标识符。
+    
+    第一个命名空间没有前缀
+    该命名空间定义了在xaml内使用的MAUI元素
+    eg: 
+    ContentPage, ScrollView ...
+    
+    xmlns:x映射System.Windows.Markup命名空间中的类型,
+    而且它也定义了XAML编译器或解析器中的一些特殊的指令.
+    这些指令通常是作为XML元素的特性出现的,
+    因此它们看上去像宿主元素的属性
+    eg: 
+    x:Class, x:ClassModifier, x:Name
+    
+    x:Class用来定义一个衍生的C#类,
+    且只能出现在XAML文件的根元素中,
+    这是唯一在XAML文件中定义的的新类.
+    其他出现在XAML文件中的东西都是简单地从现有的类中实例化并初始化。
+    eg:
+    public partial class MainPage : ContentPage
+    {
+    ...
+    }
+    -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyFirstMauiApp.MainPage"
+             xmlns:viewmodel="clr-namespace:MyFirstMauiApp.ViewModel"
+             x:DataType="viewmodel:MainViewModel"
+             Title="ToDo">
+    <Grid RowDefinitions="100,Auto,*" 
+          ColumnDefinitions=".75*,.25*" 
+          Padding="10" 
+          ColumnSpacing="10">
+        <Image Grid.ColumnSpan="2" 
+               Source="nahida.png" 
+               Background="Transparent"/>
+
+        <Entry Placeholder="Enter Task" 
+               Grid.Row="1" 
+               Text="{Binding Text}"/>
+
+        <Button Text="Add" 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                Command="{Binding AddCommand}"/>
+
+        <CollectionView Grid.Row="2" 
+                        Grid.ColumnSpan="2" 
+                        ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type x:String}">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Delete"
+                                           BackgroundColor="Red" 
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}},Path=DeleteCommand}"
+                                           CommandParameter="{Binding .}"
+                                           />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="0,5">
+                            <Frame>
+                                <Label Text="{Binding .}"
+                                   FontSize="24"/>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
