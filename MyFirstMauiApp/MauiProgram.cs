@@ -22,6 +22,10 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddSingleton<MainViewModel>();
+		
+		//每次进入都实例化一次
+		builder.Services.AddTransient<DetailPage>();
+		builder.Services.AddTransient<DetailViewModel>();
 		return builder.Build();
     }
 }
